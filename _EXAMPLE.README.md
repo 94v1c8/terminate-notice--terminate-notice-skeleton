@@ -11,7 +11,7 @@ ___Handle your AWS Spot Instance Actions with terminate-notice___
 On Debian or RedHat based systems, get the 
 [latest version of the package](https://github.com/terminate-notice/terminate-notice/releases/latest)
 and install it. You will also need the
-[latest version of this package too](https://github.com/YOUR_ORG/YOUR_PLUGIN/releases/latest).
+[latest version of this package too](https://github.com/YOUR_ORG/YOUR_REPO/releases/latest).
 
 Check all your settings are OK in the folder `/etc/terminate-notice.conf.d`
 and then start the service with
