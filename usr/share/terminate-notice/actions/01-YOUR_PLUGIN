@@ -1,0 +1,20 @@
+#!/usr/bin/sh
+
+# shellcheck disable=SC1091
+. /usr/share/terminate-notice/helpers
+
+start_action "$(basename "$0")"
+
+eval "$(load_config YOUR_PLUGIN)"
+
+if [ "$VERIFY" = "1" ]
+then
+    echo "Action $(basename "$0") - INFO: Verified at start."
+    exit 0
+fi
+
+# shellcheck disable=SC2154
+if [ "$(first_of "$ENVIRONMENT_VARIABLE" "$configuration_variable" "default_value")" = "check_value" ]
+then
+    echo "You should do something here"
+fi
