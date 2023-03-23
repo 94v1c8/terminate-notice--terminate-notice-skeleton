@@ -1,15 +1,16 @@
 #!/usr/bin/sh
+VERSION="#TAG# - #TAG_DATE#"
 
 # shellcheck disable=SC1091
 . /usr/share/terminate-notice/helpers
 
-start_action "$(basename "$0")"
+start_action "$(basename "$0")-$VERSION"
 
 eval "$(load_config YOUR_PLUGIN)"
 
 if [ "$VERIFY" = "1" ]
 then
-    echo "Action $(basename "$0") - INFO: Verified at start."
+    echo "Action $(basename "$0")-$VERSION - INFO: Verified at start."
     exit 0
 fi
 
