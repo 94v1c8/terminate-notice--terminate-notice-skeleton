@@ -1,21 +1,40 @@
 #!/usr/bin/sh
+# This will look odd in the version control, but this will be set to the tag identifier
+# and date it was tagged in CI/CD.
 VERSION="#TAG# - #TAG_DATE#"
 
+# Load the helper function used later on.
 # shellcheck disable=SC1091
 . /usr/share/terminate-notice/helpers
 
+# This announces that the action has been triggered to syslog.
 start_action "$(basename "$0")-$VERSION"
 
+# This tries to read the config then checks to see whether the load failed
 eval "$(load_config YOUR_PLUGIN)"
-
-if [ "$VERIFY" = "1" ]
+if [ "$FAILED" -eq 1 ]
 then
-    echo "Action $(basename "$0")-$VERSION - INFO: Verified at start."
-    exit 0
+    # If it failed, it will error out with RC 2
+    error 2 "$(basename "$0")-$VERSION" Failed to load config
 fi
 
+# Check all your required variables have been defined following this pattern
+debug "$(basename "$0")-$VERSION" Checking REQUIRED_VARIABLE is set
+# Load the first value from the environment variables, configuration file values or a default value
 # shellcheck disable=SC2154
-if [ "$(first_of "$ENVIRONMENT_VARIABLE" "$configuration_variable" "default_value")" = "check_value" ]
+_required_variable="$(first_of "$ENVIRONMENT_VARIABLE" "$configuration_variable" "default_value")"
+# Check that it matches your defined condition
+if [ "$_required_variable" = "MUST_HAVE_THIS_VALUE" ]
+then
+    error 2 "$(basename "$0")-$VERSION" "REQUIRED_VARIABLE is defined incorrectly"
+fi
+
+# If VERIFY=1 then this will announce that the variables were loaded OK on first run, and then exit.
+verified "$(basename "$0")-$VERSION"
+
+# Now you can actually run the action, because all the variables have been defined and tested.
+# shellcheck disable=SC2154
+if [ "${_required_variable}" = "check_value" ]
 then
     echo "You should do something here"
 fi
